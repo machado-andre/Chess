@@ -68,14 +68,11 @@ namespace Chess.Classes
         {
             Team opponent = getOppTeam();
             //if cell is occupied and is the first opponent encountered you may choose to take 
-            if (cellGrid[posX + i, posY].getIsOcuppied() && cellGrid[posX + i, posY].getPiece().getColor() == opponent)
+            if (cellGrid[posX + i, posY].getIsOcuppied() && cellGrid[posX + i, posY].getPiece().getColor() == opponent && Dir ==0)
             {
-                if(Dir == 0)
-                {
-                    cellGrid[posX + i, posY].setIsLegalMove(true);
-                    btnGrid[posX + i, posY].FillColor = Color.GreenYellow;
-                    return true;
-                }
+                cellGrid[posX + i, posY].setIsLegalMove(true);
+                btnGrid[posX + i, posY].FillColor = Color.GreenYellow;
+                return true;
             }
             else if(cellGrid[posX + i, posY].getIsOcuppied())
             {
@@ -89,14 +86,11 @@ namespace Chess.Classes
         {
             Team opponent = getOppTeam();
             //if cell is occupied and is the first opponent encountered you may choose to take 
-            if (cellGrid[posX, posY + i].getIsOcuppied() && cellGrid[posX, posY + i].getPiece().getColor() == opponent)
+            if (cellGrid[posX, posY + i].getIsOcuppied() && cellGrid[posX, posY + i].getPiece().getColor() == opponent && Dir == 0)
             {
-                if (Dir == 0)
-                {
-                    cellGrid[posX, posY + i].setIsLegalMove(true);
-                    btnGrid[posX, posY + i].FillColor = Color.GreenYellow;
-                    return true;
-                }
+                cellGrid[posX, posY + i].setIsLegalMove(true);
+                btnGrid[posX, posY + i].FillColor = Color.GreenYellow;
+                return true;
             }
             else if(cellGrid[posX, posY + i].getIsOcuppied())
             {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chess.Classes
 {
-    enum Team
+    public enum Team
     {
         White,
         Black

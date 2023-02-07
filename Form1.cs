@@ -17,11 +17,13 @@ namespace Chess
         public Guna.UI2.WinForms.Guna2Button[,] btnGrid = new Guna.UI2.WinForms.Guna2Button[board.getSize(), board.getSize()];
         Piece pieceSelected = null;
         Guna.UI2.WinForms.Guna2Button btnPreviouslyClicked;
+        Team turn;
         public Form1()
         {
             InitializeComponent();
             instBoard();
             board.setPieces();
+            turn = Team.White;
         }
 
         private void instBoard()
@@ -62,39 +64,66 @@ namespace Chess
             Guna.UI2.WinForms.Guna2Button btnClicked = (Guna.UI2.WinForms.Guna2Button) sender;
             Point btnPos = (Point)btnClicked.Tag;
             Cell cellClicked = board.setBoardGrid(btnPos.X, btnPos.Y);
-
             if (btnClicked.FillColor == Color.GreenYellow)
             {
                 btnPreviouslyClicked.Image = null;
                 btnGrid[cellClicked.getPositionX(), cellClicked.getPositionY()].Image = pieceSelected.GetImage();
                 pieceSelected.move(cellClicked);
                 resetBoard();
+                switchTurns();
                 return;
             }
 
             pieceSelected = cellClicked.getPiece();
-            if (pieceSelected != null)
+            
+            if (pieceSelected == null)
+            {
+                return;
+            }
+            if(pieceSelected.getColor() == Team.White && turn == Team.White)
+            {
                 pieceSelected.findLegalMoves(cellClicked, board.getBoardGrid(), btnGrid);
 
 
-            for (int i = 0; i < board.getSize(); i++)
-            {
-                for (int j = 0; j < board.getSize(); j++)
+                for (int i = 0; i < board.getSize(); i++)
                 {
-                    colorBoard(i, j);
-                    if (board.setBoardGrid(i, j).getIsLegalMove())
+                    for (int j = 0; j < board.getSize(); j++)
                     {
-                        btnGrid[i, j].FillColor = Color.GreenYellow;
-                        if (btnGrid[i, j].Image != null) {
-                            board.setBoardGrid(i, j).setIsOccupied(true);
+                        colorBoard(i, j);
+                        if (board.setBoardGrid(i, j).getIsLegalMove())
+                        {
+                            btnGrid[i, j].FillColor = Color.GreenYellow;
+                            if (btnGrid[i, j].Image != null)
+                            {
+                                board.setBoardGrid(i, j).setIsOccupied(true);
+                            }
                         }
                     }
                 }
+                btnPreviouslyClicked = btnClicked;
             }
+            else if(pieceSelected.getColor() == Team.Black && turn == Team.Black)
+            {
+                pieceSelected.findLegalMoves(cellClicked, board.getBoardGrid(), btnGrid);
 
-            //if (pieceSelected != null)
-                //pieceSelected.findLegalMoves(cellClicked, board.getBoardGrid(), btnGrid);
-            btnPreviouslyClicked = btnClicked;
+
+                for (int i = 0; i < board.getSize(); i++)
+                {
+                    for (int j = 0; j < board.getSize(); j++)
+                    {
+                        colorBoard(i, j);
+                        if (board.setBoardGrid(i, j).getIsLegalMove())
+                        {
+                            btnGrid[i, j].FillColor = Color.GreenYellow;
+                            if (btnGrid[i, j].Image != null)
+                            {
+                                board.setBoardGrid(i, j).setIsOccupied(true);
+                            }
+                        }
+                    }
+                }
+                btnPreviouslyClicked = btnClicked;
+            }
         }
 
         private void resetBoard()
@@ -125,6 +154,9 @@ namespace Chess
 
         }
 
-        
+        public Team switchTurns()
+        {
+            return turn == Team.White ? turn = Team.Black : turn = Team.White;
+        }        
     }
 }
