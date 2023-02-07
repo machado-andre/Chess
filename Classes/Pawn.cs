@@ -18,19 +18,7 @@ namespace Chess.Classes
         {
             int posX = curCell.getPositionX();
             int posY = curCell.getPositionY();
-            /*if (posY == 0)
-            {
-                Piece piece = cellGrid[posX, posY].getPiece();
-                piece = new Queen(Team.White,Properties.Resources.whiteQueen,2);
-                curCell.setPiece(this);
-                return;
-            }
-            if(posY == 7)                       // TO DO ---> METER ISTO NO SITIO CERTO
-            {
-                Piece piece = cellGrid[posX, posY].getPiece();
-                piece = new Queen(Team.Black, Properties.Resources.blackQueen,2);
-                return;
-            }*/
+
             if (getColor() == Team.Black)
             {
                 //check (Black) attack

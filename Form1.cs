@@ -70,6 +70,7 @@ namespace Chess
                 btnGrid[cellClicked.getPositionX(), cellClicked.getPositionY()].Image = pieceSelected.GetImage();
                 pieceSelected.move(cellClicked);
                 resetBoard();
+                promotePawn(turn);
                 switchTurns();
                 return;
             }
@@ -78,12 +79,12 @@ namespace Chess
             
             if (pieceSelected == null)
             {
+                resetBoard();
                 return;
             }
             if(pieceSelected.getColor() == Team.White && turn == Team.White)
             {
                 pieceSelected.findLegalMoves(cellClicked, board.getBoardGrid(), btnGrid);
-
 
                 for (int i = 0; i < board.getSize(); i++)
                 {
@@ -105,7 +106,6 @@ namespace Chess
             else if(pieceSelected.getColor() == Team.Black && turn == Team.Black)
             {
                 pieceSelected.findLegalMoves(cellClicked, board.getBoardGrid(), btnGrid);
-
 
                 for (int i = 0; i < board.getSize(); i++)
                 {
@@ -157,6 +157,34 @@ namespace Chess
         public Team switchTurns()
         {
             return turn == Team.White ? turn = Team.Black : turn = Team.White;
-        }        
+        }
+
+        private void checkPawnPromotion(Team team, Cell curCell, Guna.UI2.WinForms.Guna2Button[,] btnGrid)
+        {
+            if (team == Team.White)
+            {
+                Piece piece = new Queen(Team.White, Properties.Resources.whiteQueen, 2);
+                curCell.setPiece(piece);
+                piece.setLocation(curCell);
+                btnGrid[curCell.getPositionX(), curCell.getPositionY()].Image = piece.GetImage();
+                return;
+            }
+            if (team == Team.Black)
+            {
+                Piece piece = new Queen(Team.Black, Properties.Resources.blackQueen, 2);
+                curCell.setPiece(piece);
+                piece.setLocation(curCell);
+                btnGrid[curCell.getPositionX(), curCell.getPositionY()].Image = piece.GetImage();
+                return;
+            }
+        }
+
+        private void promotePawn(Team team)
+        {
+            if (pieceSelected is Pawn && (pieceSelected.getLocation().getPositionY() == 7 || pieceSelected.getLocation().getPositionY() == 0))
+            {
+                checkPawnPromotion(team, pieceSelected.getLocation(), btnGrid);
+            }
+        }
     }
 }
