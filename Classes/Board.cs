@@ -11,7 +11,7 @@ namespace Chess.Classes
         private int size;
         
         private Cell[,] boardGrid;
-        List<Piece> pieces = new List<Piece>();
+        public List<Piece> pieces = new List<Piece>();
 
         public Board(int Size)
         {

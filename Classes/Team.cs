@@ -8,6 +8,7 @@ namespace Chess.Classes
 {
     public enum Team
     {
+        None,
         White,
         Black
     }

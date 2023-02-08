@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Guna.UI2.WinForms;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -100,6 +101,11 @@ namespace Chess.Classes
             {
                 return posY + i <= end;
             }
+        }
+
+        public override void checkForCheck(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

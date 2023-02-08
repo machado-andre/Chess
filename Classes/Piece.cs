@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Guna.UI2.WinForms;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace Chess.Classes
             this.location = location;
         }
 
-        public abstract void findLegalMoves(Cell curCell, Cell[,] cellGrid, Guna.UI2.WinForms.Guna2Button[,] btnGrid);
+        public abstract void findLegalMoves(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid);
 
 
         public void move(Cell targetCell)
@@ -68,5 +69,7 @@ namespace Chess.Classes
                 return Team.Black;
             }
         }
+
+        public abstract Team checkForCheck(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid);
     }
 }

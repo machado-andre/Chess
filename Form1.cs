@@ -18,6 +18,7 @@ namespace Chess
         Piece pieceSelected = null;
         Guna.UI2.WinForms.Guna2Button btnPreviouslyClicked;
         Team turn;
+        Team inCheck;
         public Form1()
         {
             InitializeComponent();
@@ -70,13 +71,17 @@ namespace Chess
                 btnGrid[cellClicked.getPositionX(), cellClicked.getPositionY()].Image = pieceSelected.GetImage();
                 pieceSelected.move(cellClicked);
                 resetBoard();
+                pieceSelected.checkForCheck(cellClicked, board.getBoardGrid(), btnGrid);
                 promotePawn(turn);
                 switchTurns();
                 return;
             }
+            if((turn == Team.White && cellClicked.getPiece().getColor() != Team.White) || (turn == Team.Black && cellClicked.getPiece().getColor() != Team.Black))
+            {
+                return;
+            }
 
             pieceSelected = cellClicked.getPiece();
-            
             if (pieceSelected == null)
             {
                 resetBoard();
@@ -149,10 +154,7 @@ namespace Chess
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        private void Form1_Load(object sender, EventArgs e){}
 
         public Team switchTurns()
         {
@@ -186,5 +188,6 @@ namespace Chess
                 checkPawnPromotion(team, pieceSelected.getLocation(), btnGrid);
             }
         }
+
     }
 }

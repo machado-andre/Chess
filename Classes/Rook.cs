@@ -99,5 +99,10 @@ namespace Chess.Classes
             }
             return false;
         }
+
+        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid)
+        {
+            return getColor();
+        }
     }
 }
