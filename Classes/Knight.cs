@@ -96,9 +96,93 @@ namespace Chess.Classes
             return false;
         }
 
-        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid)
+        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid)
         {
-            return getColor();
+            Team opp = getOppTeam();
+            int posX = curCell.getPositionX();
+            int posY = curCell.getPositionY();
+            if (posX - 1 >= 0)
+            {
+                if (posY + 2 <= 7)
+                {
+                    if(check(posX, posY, cellGrid, -1, 2))
+                    {
+                        return opp;
+                    }
+                }
+                if (posY - 2 >= 0)
+                {
+                    if(check(posX, posY, cellGrid, -1, -2))
+                    {
+                        return opp;
+                    }
+                }
+                if (posX - 2 >= 0)
+                {
+                    if (posY + 1 <= 7)
+                    {
+                        if(check(posX, posY, cellGrid, -2, 1))
+                        {
+                            return opp;
+                        }
+                    }
+                    if (posY - 1 >= 0)
+                    {
+                        if (check(posX, posY, cellGrid, -2, -1))
+                        {
+                            return opp;
+                        }
+                    }
+                }
+            }
+            if (posX + 1 <= 7)
+            {
+                if (posY + 2 <= 7)
+                {
+                    if(check(posX, posY, cellGrid, 1, 2))
+                    {
+                        return opp;
+                    }
+                }
+                if (posY - 2 >= 0)
+                {
+                    if(check(posX, posY, cellGrid, 1, -2))
+                    {
+                        return opp;
+                    }
+                }
+
+                if (posX + 2 <= 7)
+                {
+                    if (posY + 1 <= 7)
+                    {
+                        if(check(posX, posY, cellGrid, 2, 1))
+                        {
+                            return opp;
+                        }
+                    }
+                    if (posY - 1 >= 0)
+                    {
+                        if(check(posX, posY, cellGrid, 2, -1))
+                        {
+                            return opp;
+                        }
+                    }
+                }
+            }
+            return Team.None;
+        }
+
+        public bool check(int posX, int posY, Cell[,] cellGrid, int i, int j)
+        {
+            Team opp = getOppTeam();
+            //if cell is occupied and is the first opponent encountered you may choose to take 
+            if (cellGrid[posX + i, posY + j].getIsOcuppied() && cellGrid[posX + i, posY + j].getPiece().getColor() == opp && cellGrid[posX + i, posY + j].getPiece() is King)
+            {
+                MessageDialog.Show(opp.ToString() + " in Check!");
+                return true;
+            }
+            return false;
         }
     }
 }

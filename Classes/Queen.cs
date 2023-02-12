@@ -197,9 +197,184 @@ namespace Chess.Classes
             return false;
         }
 
-        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid)
+        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid)
         {
-            throw new NotImplementedException();
+            Team opp = getOppTeam();
+            int posX = curCell.getPositionX();
+            int posY = curCell.getPositionY();
+            int i = -1;
+
+
+            //Horizontal
+            while (posX + i >= 0)
+            {
+                if (horizontalCheck(i, posX, posY, cellGrid, opp) == 1)
+                {
+                    return opp;
+                }
+                else if (horizontalCheck(i, posX, posY, cellGrid, opp) == 2)
+                {
+                    break;
+                }
+                i--;
+            }
+            i = 1;
+            while (posX + i <= 7)
+            {
+                if (horizontalCheck(i, posX, posY, cellGrid, opp) == 1)
+                {
+                    return opp;
+                }
+                else if (horizontalCheck(i, posX, posY, cellGrid, opp) == 2)
+                {
+                    break;
+                }
+                i++;
+            }
+            i = -1;
+
+            //Vertical
+            while (posY + i >= 0)
+            {
+                if (verticalCheck(i, posX, posY, cellGrid, opp) == 1)
+                {
+                    return opp;
+                }
+                else if (verticalCheck(i, posX, posY, cellGrid, opp) == 2)
+                {
+                    break;
+                }
+                i--;
+            }
+            i = 1;
+            while (posY + i <= 7)
+            {
+                if (verticalCheck(i, posX, posY, cellGrid, opp) == 1)
+                {
+                    return opp;
+                }
+                else if (verticalCheck(i, posX, posY, cellGrid, opp) == 2)
+                {
+                    break;
+                }
+                i++;
+            }
+
+            i = 1;
+            while (posX + i <= 7 && posY + i <= 7)
+            {
+                if (checkRight(i, posX, posY, cellGrid, opp) == 1)
+                {
+                    return opp;
+                }
+                else if (checkRight(i, posX, posY, cellGrid, opp) == 2)
+                {
+                    break;
+                }
+                i++;
+            }
+            i = -1;
+            while (posX + i >= 0 && posY + i >= 0)
+            {
+                if (checkRight(i, posX, posY, cellGrid, opp) == 1)
+                {
+                    return opp;
+                }
+                else if (checkRight(i, posX, posY, cellGrid, opp) == 2)
+                {
+                    break;
+                }
+                i--;
+            }
+
+            i = 1;
+            while (posX + i <= 7 && posY - i >= 0)
+            {
+                if (checkLeft(i, posX, posY, cellGrid, opp) == 1)
+                {
+                    return opp;
+                }
+                else if (checkLeft(i, posX, posY, cellGrid, opp) == 2)
+                {
+                    break;
+                }
+                i++;
+            }
+            i = -1;
+            while (posX + i >= 0 && posY - i <= 7)
+            {
+                if (checkLeft(i, posX, posY, cellGrid, opp) == 1)
+                {
+                    return opp;
+                }
+                else if (checkLeft(i, posX, posY, cellGrid, opp) == 2)
+                {
+                    break;
+                }
+                i--;
+            }
+
+            return Team.None;
+        }
+
+
+        public int horizontalCheck(int i, int posX, int posY, Cell[,] cellGrid, Team opp)
+        {
+            if (cellGrid[posX + i, posY].getIsOcuppied() && cellGrid[posX + i, posY].getPiece().getColor() == opp && !(cellGrid[posX + i, posY].getPiece() is King))
+            {
+                return 2;
+            }
+            //if cell is occupied and is the first opponent encountered you may choose to take 
+            else if (cellGrid[posX + i, posY].getIsOcuppied() && cellGrid[posX + i, posY].getPiece().getColor() == opp && cellGrid[posX + i, posY].getPiece() is King)
+            {
+                MessageDialog.Show(opp.ToString() + " in Check!");
+                return 1;
+            }
+            return 0;
+        }
+
+        public int verticalCheck(int i, int posX, int posY, Cell[,] cellGrid, Team opp)
+        {
+            if (cellGrid[posX, posY + i].getIsOcuppied() && cellGrid[posX, posY + i].getPiece().getColor() == opp && !(cellGrid[posX, posY + i].getPiece() is King))
+            {
+                return 2;
+            }
+            else if (cellGrid[posX, posY + i].getIsOcuppied() && cellGrid[posX, posY + i].getPiece().getColor() == opp && cellGrid[posX, posY + i].getPiece() is King)
+            {
+                MessageDialog.Show(opp.ToString() + " in Check!");
+                return 1;
+            }
+            return 0;
+        }
+
+
+        private int checkLeft(int i, int posX, int posY, Cell[,] cellGrid, Team opp)
+        {
+            if (cellGrid[posX + i, posY - i].getIsOcuppied() && cellGrid[posX + i, posY - i].getPiece().getColor() == opp && !(cellGrid[posX + i, posY - i].getPiece() is King))
+            {
+                return 2;
+            }
+            else if (cellGrid[posX + i, posY - i].getIsOcuppied() && cellGrid[posX + i, posY - i].getPiece().getColor() == opp && cellGrid[posX + i, posY - i].getPiece() is King)
+            {
+                MessageDialog.Show(opp.ToString() + " in Check!");
+                return 1;
+
+            }
+            return 0;
+        }
+
+        private int checkRight(int i, int posX, int posY, Cell[,] cellGrid, Team opp)
+        {
+            if (cellGrid[posX + i, posY + i].getIsOcuppied() && cellGrid[posX + i, posY + i].getPiece().getColor() == opp && !(cellGrid[posX + i, posY + i].getPiece() is King))
+            {
+                return 2;
+            }
+            else if (cellGrid[posX + i, posY + i].getIsOcuppied() && cellGrid[posX + i, posY + i].getPiece().getColor() == opp && cellGrid[posX + i, posY + i].getPiece() is King)
+            {
+                MessageDialog.Show(opp.ToString() + " in Check!");
+                return 1;
+            }
+            return 0;
         }
     }
 }

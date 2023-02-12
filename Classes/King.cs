@@ -85,10 +85,9 @@ namespace Chess.Classes
             return false;
         }
 
-        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid)
+        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid)
         {
-            throw new NotImplementedException();
+            return Team.None;
         }
     }
-
 }

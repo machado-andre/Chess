@@ -19,56 +19,57 @@ namespace Chess.Classes
         {
             int posX = curCell.getPositionX();
             int posY = curCell.getPositionY();
-            int L = 0, R = 0, U = 0, D = 0;
-            int i = -1, j = 1;
+            int i = -1;
 
             //Horizontal
             while (posX + i >= 0)
             {
                 cellGrid[posX + i, posY].setIsLegalMove(true);
-                if (checkHorizontalMove(i, posX, posY, cellGrid, btnGrid, L))
+                if (checkHorizontalMove(i, posX, posY, cellGrid, btnGrid))
                 {
                     break;
                 }
                 i--;
             }
-            while(posX + j <= 7)
+            i = 1;
+            while(posX + i <= 7)
             {
-                cellGrid[posX + j, posY].setIsLegalMove(true);
-                if (checkHorizontalMove(j, posX, posY, cellGrid, btnGrid,R))
+                cellGrid[posX + i, posY].setIsLegalMove(true);
+                if (checkHorizontalMove(i, posX, posY, cellGrid, btnGrid))
                 {
                     break;
                 }
-                j++;
+                i++;
             }
-            i = -1; j = 1;
+            i = -1;
+
             //Vertical
             while(posY + i >= 0)
             {
                 cellGrid[posX, posY + i].setIsLegalMove(true);
-                if (checkVerticalMove(i, posX, posY, cellGrid, btnGrid, D))
+                if (checkVerticalMove(i, posX, posY, cellGrid, btnGrid))
                 {
                     break;
                 }
                 i--;
             }
-
-            while(posY + j <= 7)
+            i = 1;
+            while(posY + i <= 7)
             {
-                cellGrid[posX, posY + j].setIsLegalMove(true);
-                if (checkVerticalMove(j, posX, posY, cellGrid, btnGrid, U))
+                cellGrid[posX, posY + i].setIsLegalMove(true);
+                if (checkVerticalMove(i, posX, posY, cellGrid, btnGrid))
                 {
                     break;
                 }
-                j++;
+                i++;
             }
         }
 
-        public bool checkHorizontalMove(int i, int posX, int posY, Cell[,] cellGrid, Guna2Button[,] btnGrid, int Dir)
+        public bool checkHorizontalMove(int i, int posX, int posY, Cell[,] cellGrid, Guna2Button[,] btnGrid)
         {
             Team opponent = getOppTeam();
             //if cell is occupied and is the first opponent encountered you may choose to take 
-            if (cellGrid[posX + i, posY].getIsOcuppied() && cellGrid[posX + i, posY].getPiece().getColor() == opponent && Dir ==0)
+            if (cellGrid[posX + i, posY].getIsOcuppied() && cellGrid[posX + i, posY].getPiece().getColor() == opponent)
             {
                 cellGrid[posX + i, posY].setIsLegalMove(true);
                 btnGrid[posX + i, posY].FillColor = Color.GreenYellow;
@@ -82,11 +83,11 @@ namespace Chess.Classes
             return false;
         }
 
-        public bool checkVerticalMove(int i, int posX, int posY, Cell[,] cellGrid, Guna2Button[,] btnGrid, int Dir)
+        public bool checkVerticalMove(int i, int posX, int posY, Cell[,] cellGrid, Guna2Button[,] btnGrid)
         {
             Team opponent = getOppTeam();
             //if cell is occupied and is the first opponent encountered you may choose to take 
-            if (cellGrid[posX, posY + i].getIsOcuppied() && cellGrid[posX, posY + i].getPiece().getColor() == opponent && Dir == 0)
+            if (cellGrid[posX, posY + i].getIsOcuppied() && cellGrid[posX, posY + i].getPiece().getColor() == opponent)
             {
                 cellGrid[posX, posY + i].setIsLegalMove(true);
                 btnGrid[posX, posY + i].FillColor = Color.GreenYellow;
@@ -100,9 +101,99 @@ namespace Chess.Classes
             return false;
         }
 
-        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid)
+        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid)
         {
-            return getColor();
+            Team opp = getOppTeam();
+            int posX = curCell.getPositionX();
+            int posY = curCell.getPositionY();
+            int i = -1;
+
+            //Horizontal
+            while (posX + i >= 0)
+            {
+                if (horizontalCheck(i, posX, posY, cellGrid) == 1)
+                {
+                    return opp;
+                }
+                else if (horizontalCheck(i, posX, posY, cellGrid) == 2)
+                {
+                    break;
+                }
+                i--;
+            }
+            i = 1;
+            while (posX + i <= 7)
+            {
+                if (horizontalCheck(i, posX, posY, cellGrid) == 1)
+                {
+                    return opp;
+                }
+                else if (horizontalCheck(i, posX, posY, cellGrid) == 2)
+                {
+                    break;
+                }
+                i++;
+            }
+            i = -1;
+
+            //Vertical
+            while (posY + i >= 0)
+            {
+                if (verticalCheck(i, posX, posY, cellGrid) == 1)
+                {
+                    return opp;
+                }
+                else if (verticalCheck(i, posX, posY, cellGrid) == 2)
+                {
+                    break;
+                }
+                i--;
+            }
+            i = 1;
+            while (posY + i <= 7)
+            {
+                if (verticalCheck(i, posX, posY, cellGrid) == 1)
+                {
+                    return opp;
+                }
+                else if(verticalCheck(i, posX, posY, cellGrid) == 2)
+                {
+                    break;
+                }
+                i++;
+            }
+            return Team.None;
+        }
+
+
+        public int horizontalCheck(int i, int posX, int posY, Cell[,] cellGrid)
+        {
+            Team opp = getOppTeam();
+            if (cellGrid[posX + i, posY].getIsOcuppied() && cellGrid[posX + i, posY].getPiece().getColor() == opp && !(cellGrid[posX + i, posY].getPiece() is King))
+            {
+                return 2;
+            }
+            //if cell is occupied and is the first opponent encountered you may choose to take 
+            else if (cellGrid[posX + i, posY].getIsOcuppied() && cellGrid[posX + i, posY].getPiece().getColor() == opp && cellGrid[posX + i, posY].getPiece() is King)
+            {
+                MessageDialog.Show(opp.ToString() + " in Check!");
+                return 1;
+            }
+            return 0;
+        }
+
+        public int verticalCheck(int i, int posX, int posY, Cell[,] cellGrid)
+        {
+            Team opp = getOppTeam();
+            if (cellGrid[posX, posY + i].getIsOcuppied() && cellGrid[posX, posY + i].getPiece().getColor() == opp && !(cellGrid[posX, posY + i].getPiece() is King))
+            {
+                return 2;
+            }else if (cellGrid[posX, posY + i].getIsOcuppied() && cellGrid[posX, posY + i].getPiece().getColor() == opp && cellGrid[posX, posY + i].getPiece() is King)
+            {
+                MessageDialog.Show(opp.ToString() + " in Check!");
+                return 1;
+            } 
+            return 0;
         }
     }
 }

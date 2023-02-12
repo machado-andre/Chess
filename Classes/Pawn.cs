@@ -23,16 +23,16 @@ namespace Chess.Classes
             if (getColor() == Team.Black)
             {
                 //check (Black) attack
-                findYVariation(posX, posY, curCell, cellGrid, btnGrid, 1, Team.White, 1, 7);
+                findYVariation(posX, posY, cellGrid, btnGrid, 1, Team.White, 1, 7);
             }
             else
             {
                 // check (White) attack
-                findYVariation(posX, posY, curCell, cellGrid, btnGrid, -1, Team.Black, 6, 0);
+                findYVariation(posX, posY, cellGrid, btnGrid, -1, Team.Black, 6, 0);
             }
         }
 
-        private void findYVariation(int posX, int posY ,Cell curCell, Cell[,] cellGrid, Guna.UI2.WinForms.Guna2Button[,] btnGrid, int i, Team color,int start, int end)
+        private void findYVariation(int posX, int posY, Cell[,] cellGrid, Guna.UI2.WinForms.Guna2Button[,] btnGrid, int i, Team color,int start, int end)
         {
 
             if (posX + 1 <= 7 && checkTeam(posY,end,i))
@@ -103,9 +103,47 @@ namespace Chess.Classes
             }
         }
 
-        public override void checkForCheck(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid)
+        public override Team checkForCheck(Cell curCell, Cell[,] cellGrid)
         {
-            //throw new NotImplementedException();
+            int posX = curCell.getPositionX();
+            int posY = curCell.getPositionY();
+
+            Team opp = getOppTeam();
+            if (getColor() == Team.Black)
+            {
+                if(check(posX, posY, cellGrid, 1, 1))
+                {
+                    return opp;
+                }else if(check(posX, posY, cellGrid, -1, 1)){
+                    return opp;
+                }
+                return Team.None;
+            }
+            else
+            {
+                if (check(posX, posY, cellGrid, 1, -1))
+                {
+                    return opp;
+                }
+                else if (check(posX, posY, cellGrid, -1, -1))
+                {
+                    return opp;
+                }
+                return Team.None;
+            }
+        }
+
+        public bool check(int posX, int posY, Cell[,] cellGrid, int i, int j)
+        {
+            Team opp = getOppTeam();
+            if (posX + i <= 0 || posX + i >= 7 || posY + j <= 0 || posY + j >= 7)
+                return false;
+            if (cellGrid[posX + i, posY + j].getIsOcuppied() && cellGrid[posX + i, posY + j].getPiece().getColor() == opp && cellGrid[posX + i, posY + j].getPiece() is King)
+            {
+                MessageDialog.Show(opp.ToString() + " in Check!");
+                return true;
+            }
+            return false;
         }
     }
 }

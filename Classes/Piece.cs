@@ -70,6 +70,6 @@ namespace Chess.Classes
             }
         }
 
-        public abstract Team checkForCheck(Cell curCell, Cell[,] cellGrid, Guna2Button[,] btnGrid);
+        public abstract Team checkForCheck(Cell curCell, Cell[,] cellGrid);
     }
 }

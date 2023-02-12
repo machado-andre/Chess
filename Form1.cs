@@ -71,22 +71,22 @@ namespace Chess
                 btnGrid[cellClicked.getPositionX(), cellClicked.getPositionY()].Image = pieceSelected.GetImage();
                 pieceSelected.move(cellClicked);
                 resetBoard();
-                pieceSelected.checkForCheck(cellClicked, board.getBoardGrid(), btnGrid);
+                inCheck = pieceSelected.checkForCheck(cellClicked, board.getBoardGrid());
                 promotePawn(turn);
                 switchTurns();
                 return;
             }
-            if((turn == Team.White && cellClicked.getPiece().getColor() != Team.White) || (turn == Team.Black && cellClicked.getPiece().getColor() != Team.Black))
+            if (cellClicked.getPiece() == null)
+            {
+                resetBoard();
+                return;
+            }
+            if ((turn == Team.White && cellClicked.getPiece().getColor() != Team.White) || (turn == Team.Black && cellClicked.getPiece().getColor() != Team.Black))
             {
                 return;
             }
 
             pieceSelected = cellClicked.getPiece();
-            if (pieceSelected == null)
-            {
-                resetBoard();
-                return;
-            }
             if(pieceSelected.getColor() == Team.White && turn == Team.White)
             {
                 pieceSelected.findLegalMoves(cellClicked, board.getBoardGrid(), btnGrid);
